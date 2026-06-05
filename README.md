@@ -1,78 +1,123 @@
 # temporal-sync-inspector
 
-Detects audio-visual desync in video files using Gemma 4's encoder-free multimodal architecture.
+Detects audio-visual desync in video files using Gemma 4's encoder-free multimodal architecture. Audio and video share the same RoPE positional space — the model reasons about time alignment in a single forward pass. No Whisper, no separate vision encoder, no cloud.
 
-Audio and video share the same RoPE positional space — the model reasons about time alignment between modalities in a single forward pass. No Whisper, no separate vision encoder, no cloud.
+Two implementations available:
+- **`main` branch** — Python + Gradio (web UI)
+- **`go-rewrite` branch** — Go CLI (single binary, no Python needed)
 
-## How it works
+---
 
-Traditional pipelines run a vision encoder + ASR model separately, then ask an LLM to correlate two independent representations. Gemma 4 projects raw 16kHz audio frames and image patches through the **same backbone** with shared positional embeddings — so it can natively correlate mouth shapes with phonemes at the token level.
+## Prerequisites
 
-## Install
-
-### Prerequisites
+### 1. Ollama + Gemma 4 E4B
 
 ```bash
-# ffmpeg + ffprobe (required for frame/audio extraction)
-brew install ffmpeg          # macOS
-sudo apt install ffmpeg      # Ubuntu/Debian
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh   # macOS/Linux
+# Windows: https://ollama.com/download
 
-# Ollama with Gemma 4 E4B
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull gemma4:e4b       # 9.6GB, 8GB RAM, audio + vision
+# Pull the model (9.6GB)
+ollama pull gemma4:e4b
+
+# Verify
+ollama list
+# should show: gemma4:e4b
 ```
 
-### Build from source
+### 2. ffmpeg (required for both versions)
 
 ```bash
+brew install ffmpeg          # macOS
+sudo apt install ffmpeg      # Ubuntu/Debian
+sudo dnf install ffmpeg      # Fedora
+# Windows: https://ffmpeg.org/download.html — add to PATH
+```
+
+---
+
+## Go CLI (go-rewrite branch) — recommended
+
+Single binary, no Python, no pip.
+
+### Install
+
+```bash
+# Option A — build from source
 git clone https://github.com/Siddhant-K-code/temporal-sync-inspector
 cd temporal-sync-inspector
 git checkout go-rewrite
 go build -o tsi ./cmd/tsi
-```
 
-### Install to PATH
-
-```bash
+# Option B — install directly
 go install github.com/Siddhant-K-code/temporal-sync-inspector/cmd/tsi@latest
 ```
 
-## Usage
+### Run
 
 ```bash
-# Analyze full video (sliding 30s windows)
+# Analyze full video (slides a 30s window across the whole file)
 tsi video.mp4
 
-# Quick check — single window
+# Quick check — single window starting at 0s
 tsi video.mp4 --quick --start 0 --duration 30
 
-# Custom window size and FPS
-tsi video.mp4 --window 60 --fps 2
+# Check a specific section (e.g. t=60s for 45s)
+tsi video.mp4 --quick --start 60 --duration 45
 
-# JSON output (pipe to jq, scripts, etc.)
+# Higher frame rate for fast-motion content
+tsi video.mp4 --fps 2
+
+# JSON output — pipe to jq or scripts
+tsi video.mp4 --json
 tsi video.mp4 --json | jq '.verdict'
+tsi video.mp4 --json | jq '.windows[] | select(.in_sync == false)'
+
+# Use a lighter model if RAM is tight
+tsi video.mp4 --model gemma4:e2b
 
 # Remote Ollama server
 tsi video.mp4 --host http://192.168.1.10:11434
-
-# Smaller/faster model
-tsi video.mp4 --model gemma4:e2b
 ```
 
-## Flags
+### All flags
 
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--model` | `gemma4:e4b` | Ollama model |
 | `--host` | `http://localhost:11434` | Ollama host |
-| `--fps` | `1` | Frames per second to extract |
-| `--window` | `30` | Analysis window size (seconds) |
-| `--start` | `0` | Start time for `--quick` mode |
-| `--duration` | `30` | Duration for `--quick` mode |
+| `--fps` | `1` | Frames per second to extract (1–2) |
+| `--window` | `30` | Window size in seconds (full mode) |
 | `--quick` | false | Analyze a single window only |
-| `--json` | false | Output raw JSON |
+| `--start` | `0` | Start time in seconds (quick mode) |
+| `--duration` | `30` | Duration in seconds (quick mode) |
+| `--json` | false | Output raw JSON instead of formatted report |
 
-## Output
+---
+
+## Python + Gradio UI (main branch)
+
+### Install
+
+```bash
+git clone https://github.com/Siddhant-K-code/temporal-sync-inspector
+cd temporal-sync-inspector
+# main branch is already checked out
+pip install -r requirements.txt
+```
+
+### Run
+
+```bash
+python app.py
+# Opens at http://localhost:7860
+```
+
+Upload a video, choose quick check or full analysis, click Analyze.
+
+---
+
+## Example output (Go CLI)
 
 ```
   Temporal Sync Inspector
@@ -120,18 +165,32 @@ tsi video.mp4 --model gemma4:e2b
 }
 ```
 
+---
+
+## How it works
+
+Traditional pipelines: `video → vision encoder → embeddings` + `audio → Whisper → text` → LLM correlates two separate representations.
+
+Gemma 4 E4B: raw 16kHz audio frames and image patches both project directly into the LLM's token space via the same linear projection. RoPE handles temporal ordering for both modalities. The model can natively say "at t=2.3s, the mouth shape doesn't match the phoneme in the audio" — in a single forward pass.
+
+---
+
 ## Project structure
 
 ```
 temporal-sync-inspector/
-├── cmd/tsi/main.go              # CLI entry point (cobra)
+├── cmd/tsi/main.go              # Go CLI (cobra) — go-rewrite branch
 ├── internal/
-│   ├── extract/extract.go       # ffmpeg wrapper — frames + 16kHz audio
+│   ├── extract/extract.go       # ffmpeg wrapper — frames + 16kHz WAV
 │   ├── ollama/client.go         # Ollama /api/chat multimodal client
-│   └── inspector/inspector.go   # windowed analysis + summary
-├── go.mod
-└── README.md
+│   └── inspector/inspector.go   # windowed analysis engine + summary
+├── app.py                       # Python Gradio UI — main branch
+├── extract.py                   # Python ffmpeg wrapper
+├── inspector.py                 # Python analysis logic
+└── requirements.txt
 ```
+
+---
 
 ## License
 
