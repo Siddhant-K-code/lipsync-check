@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.env
+*.wav
+*.mp3
+*.mp4
+*.avi
+*.mov
+/tmp/
