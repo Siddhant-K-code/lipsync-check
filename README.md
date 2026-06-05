@@ -28,11 +28,13 @@ ollama list
 ### 2. ffmpeg (required for both versions)
 
 ```bash
-brew install ffmpeg          # macOS
+brew install ffmpeg          # macOS (Homebrew)
 sudo apt install ffmpeg      # Ubuntu/Debian
 sudo dnf install ffmpeg      # Fedora
-# Windows: https://ffmpeg.org/download.html — add to PATH
+# Windows: https://ffmpeg.org/download.html — add ffmpeg/ffprobe to PATH
 ```
+
+**macOS note:** If you don't have Homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
 ---
 
