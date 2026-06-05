@@ -1,16 +1,16 @@
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-venv/
-env/
-*.egg-info/
+# Build output — binary only (not the cmd/tsi/ source directory)
+/tsi
+/tsi.exe
 dist/
-build/
-.env
-*.wav
-*.mp3
-*.mp4
-*.avi
-*.mov
-/tmp/
+
+# Go
+*.test
+*.out
+vendor/
+
+# Temp files created during analysis
+tsi_frames_*/
+tsi_audio_*.wav
+
+# OS
+.DS_Store
