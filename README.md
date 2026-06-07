@@ -24,7 +24,7 @@ sudo apt install ffmpeg      # Ubuntu/Debian
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/temporal-sync-inspector/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/lipsync-check/main/install.sh | bash
 ```
 
 Installs `lipsync-check` to `/usr/local/bin`. Override with `INSTALL_DIR=~/.local/bin`.
@@ -39,13 +39,13 @@ go install github.com/Siddhant-K-code/lipsync-check/cmd/tsi@latest
 
 **Build from source:**
 ```bash
-git clone https://github.com/Siddhant-K-code/temporal-sync-inspector
+git clone https://github.com/Siddhant-K-code/lipsync-check
 cd temporal-sync-inspector
 go build -o lipsync-check ./cmd/tsi/
 ```
 
 **Manual download:**
-Grab the binary for your platform from the [Releases page](https://github.com/Siddhant-K-code/temporal-sync-inspector/releases), extract, and move to your `$PATH`.
+Grab the binary for your platform from the [Releases page](https://github.com/Siddhant-K-code/lipsync-check/releases), extract, and move to your `$PATH`.
 
 </details>
 

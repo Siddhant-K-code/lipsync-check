@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="Siddhant-K-code/temporal-sync-inspector"
+REPO="Siddhant-K-code/lipsync-check"
 BINARY="lipsync-check"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 
