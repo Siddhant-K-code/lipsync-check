@@ -40,7 +40,7 @@ var dim    = color.New(color.Faint)
 var cyan   = color.New(color.FgCyan)
 
 var rootCmd = &cobra.Command{
-	Use:   "tsi <video>",
+	Use:   "lipsync-check <video>",
 	Short: "Temporal Sync Inspector — detect A/V desync using Gemma 4",
 	Long: `Temporal Sync Inspector
 
@@ -51,10 +51,10 @@ space — the model reasons about time alignment in a single forward pass.
 No Whisper. No separate vision encoder. Fully local via Ollama.
 
 Examples:
-  tsi video.mp4
-  tsi video.mp4 --quick --start 10 --duration 30
-  tsi video.mp4 --window 60 --fps 2 --json
-  tsi video.mp4 --model gemma4:e2b --host http://192.168.1.10:11434`,
+  lipsync-check video.mp4
+  lipsync-check video.mp4 --quick --start 10 --duration 30
+  lipsync-check video.mp4 --window 60 --fps 2 --json
+  lipsync-check video.mp4 --model gemma4:e2b --host http://192.168.1.10:11434`,
 	Args: cobra.ExactArgs(1),
 	RunE: run,
 }
