@@ -14,6 +14,13 @@ import (
 	"github.com/Siddhant-K-code/lipsync-check/internal/inspector"
 )
 
+// Set by goreleaser via ldflags at build time.
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 var (
 	flagModel      string
 	flagHost       string
@@ -53,6 +60,7 @@ Examples:
 }
 
 func init() {
+	rootCmd.Version = fmt.Sprintf("%s (commit %s, built %s)", version, commit, date)
 	rootCmd.Flags().StringVar(&flagModel, "model", "gemma4:e4b", "Ollama model to use")
 	rootCmd.Flags().StringVar(&flagHost, "host", "http://localhost:11434", "Ollama host URL")
 	rootCmd.Flags().IntVar(&flagFPS, "fps", 1, "Frames per second to extract (1–2)")
