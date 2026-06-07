@@ -1,4 +1,4 @@
-# temporal-sync-inspector
+# lipsync-check
 
 Detects audio-visual desync in video files using [Gemma 4](https://ollama.com/library/gemma4) via Ollama.
 
@@ -25,12 +25,12 @@ sudo apt install ffmpeg      # Ubuntu/Debian
 
 ```bash
 # Build from source
-git clone https://github.com/Siddhant-K-code/temporal-sync-inspector
-cd temporal-sync-inspector
+git clone https://github.com/Siddhant-K-code/lipsync-check
+cd lipsync-check
 go build -o tsi ./cmd/tsi
 
 # Or install directly
-go install github.com/Siddhant-K-code/temporal-sync-inspector/cmd/tsi@latest
+go install github.com/Siddhant-K-code/lipsync-check/cmd/tsi@latest
 ```
 
 ## Usage
@@ -115,7 +115,7 @@ tsi video.mp4 --host http://192.168.1.10:11434  # remote Ollama
 ## Project structure
 
 ```
-temporal-sync-inspector/
+lipsync-check/
 ├── cmd/tsi/main.go
 └── internal/
     ├── extract/extract.go      # ffmpeg wrapper — frames + 16kHz WAV

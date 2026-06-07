@@ -1,4 +1,4 @@
-module github.com/Siddhant-K-code/temporal-sync-inspector
+module github.com/Siddhant-K-code/lipsync-check
 
 go 1.25.0
 

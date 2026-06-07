@@ -11,7 +11,7 @@ import (
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 
-	"github.com/Siddhant-K-code/temporal-sync-inspector/internal/inspector"
+	"github.com/Siddhant-K-code/lipsync-check/internal/inspector"
 )
 
 var (

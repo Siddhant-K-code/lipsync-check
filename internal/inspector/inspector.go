@@ -1,4 +1,4 @@
-// Package inspector drives the temporal sync analysis.
+// Package inspector drives the audio-visual sync analysis.
 // It slides a window across the video, sends frames + audio to Gemma 4
 // in a single multimodal prompt, and parses the structured JSON result.
 package inspector
@@ -9,13 +9,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Siddhant-K-code/temporal-sync-inspector/internal/extract"
-	"github.com/Siddhant-K-code/temporal-sync-inspector/internal/ollama"
+	"github.com/Siddhant-K-code/lipsync-check/internal/extract"
+	"github.com/Siddhant-K-code/lipsync-check/internal/ollama"
 )
 
-const systemPrompt = `You are a temporal sync analyzer. You receive video frames (with timestamps) and the corresponding audio from the same time window.
+const systemPrompt = `You are an audio-visual sync analyzer. You receive video frames (with timestamps) and the corresponding audio from the same time window.
 
-Your job: determine whether the audio and video are temporally synchronized.
+Your job: determine whether the audio and video are synchronized.
 
 Focus on:
 1. Lip sync — do mouth movements match the phonemes/words in the audio?
