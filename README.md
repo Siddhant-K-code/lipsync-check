@@ -8,7 +8,7 @@ tsi video.mp4 --quick --start 60 --duration 30
 tsi video.mp4 --json | jq '.verdict'
 ```
 
-No Python. No cloud. Single binary.
+No cloud. Single binary.
 
 ## Requirements
 
