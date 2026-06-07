@@ -3,10 +3,12 @@
 Detects audio-visual desync in video files using [Gemma 4](https://ollama.com/library/gemma4) via Ollama.
 
 ```bash
-tsi video.mp4
-tsi video.mp4 --quick --start 60 --duration 30
-tsi video.mp4 --json | jq '.verdict'
+lipsync-check --model gemma4:e4b video.mp4
+lipsync-check --model gemma4:e4b video.mp4 --quick --start 60 --duration 30
+lipsync-check --model gemma4:e4b video.mp4 --json | jq '.verdict'
 ```
+
+Set `OLLAMA_MODEL=gemma4:e4b` to skip `--model` on every command.
 
 No cloud. Single binary.
 
@@ -58,13 +60,12 @@ Grab the binary for your platform from the [Releases page](https://github.com/Si
 ## Usage
 
 ```bash
-tsi video.mp4                          # full analysis (sliding 30s windows)
-tsi video.mp4 --quick --start 0       # single window from t=0s
-tsi video.mp4 --quick --start 60 --duration 45
-tsi video.mp4 --fps 2                  # higher frame rate for fast motion
-tsi video.mp4 --json                   # raw JSON output
-tsi video.mp4 --model gemma4:e4b      # specify model
-tsi video.mp4 --host http://192.168.1.10:11434  # remote Ollama
+lipsync-check --model gemma4:e4b video.mp4                                    # full analysis
+lipsync-check --model gemma4:e4b video.mp4 --quick --start 0                  # single window from t=0s
+lipsync-check --model gemma4:e4b video.mp4 --quick --start 60 --duration 45
+lipsync-check --model gemma4:e4b video.mp4 --fps 2                            # higher frame rate
+lipsync-check --model gemma4:e4b video.mp4 --json                             # raw JSON output
+lipsync-check --model gemma4:e4b video.mp4 --host http://192.168.1.10:11434  # remote Ollama
 ```
 
 <details>
