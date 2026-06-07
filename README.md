@@ -10,6 +10,12 @@ tsi video.mp4 --json | jq '.verdict'
 
 No cloud. Single binary.
 
+## Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/lipsync-check/main/install.sh | bash
+```
+
 ## Requirements
 
 - [Ollama](https://ollama.com) running locally with `gemma4:e4b` pulled
