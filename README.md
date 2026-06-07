@@ -24,9 +24,13 @@ curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/lipsync-check/main/
 - `ffmpeg` on your PATH
 
 ```bash
+# Ollama model
 ollama pull gemma4:e4b
+
+# ffmpeg
 brew install ffmpeg          # macOS
 sudo apt install ffmpeg      # Ubuntu/Debian
+sudo dnf install ffmpeg      # Fedora
 ```
 
 ## Install
